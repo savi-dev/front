@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2012, The SAVI Project. All rights reserved.
+
+  Front
+  SAVI Front End Server.
+
+  Soheil Hassas Yeganeh <soheil@cs.toronto.edu>
+-->
+<project name="front" default="all"
+    xmlns:ivy="antlib:org.apache.ivy.ant">
+  <description>
+    SAVI front end server.
+  </description>
+
+  <!-- TODO: Fill these variables. -->
+  <property name="PROJECT_NAME" value="front" />
+  <property name="VERSION" value="0.1" />
+  <property name="TEST_SUITE_CLASS" value="ca.savi.front.test.TestSuite" />
+
+  <property name="DEBUG" value="true" />
+
+  <!-- DIRECTORIES -->
+  <property name="SAVI_HOME" value="../" />
+  <property name="PROJECT_HOME" value="./" />
+
+  <property name="BUILD_DIR" value="${PROJECT_HOME}/build/" />
+  <property name="CLASSES_DIR" value="${PROJECT_HOME}/build/classes/" />
+  <property name="DIST_DIR" value="${PROJECT_HOME}/dist/" />
+  <property name="GEN_DIR" value="${PROJECT_HOME}/build/gen-src/" />
+  <property name="GEN_SRC_DIR" value="${PROJECT_HOME}/${GEN_DIR}/java/" />
+  <property name="LIB_DIR" value="${PROJECT_HOME}/build/lib/" />
+  <property name="RESOURCES_DIR" value="resources/" />
+  <property name="SRC_DIR" value="${PROJECT_HOME}/src/java/" />
+  <property name="SRC_TEST_DIR" value="${PROJECT_HOME}/test/java/" />
+
+  <!-- CLASSPATH -->
+  <path id="classpath.lib">
+     <fileset dir="${LIB_DIR}" includes="*.jar" />
+  </path>
+
+  <path id="classpath.all">
+    <path refid="classpath.lib" />
+    <pathelement location="${CLASSES_DIR}" />
+  </path>
+
+  <!-- TARGETS -->
+  <target name="all" depends="build">
+  </target>
+
+  <target name="dist" depends="build">
+    <jar destfile="${DIST_DIR}/${PROJECT_NAME}-${VERSION}.jar">
+      <fileset dir="${CLASSES_DIR}">
+        <include name="**/*"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="build" depends="deps">
+    <javac srcdir="${SRC_DIR}:${GEN_SRC_DIR}"
+        includeantruntime="false" destdir="${CLASSES_DIR}" debug="${DEBUG}">
+      <classpath refid="classpath.lib" />
+    </javac>
+    <copy todir="${CLASSES_DIR}">
+      <fileset dir="${RESOURCES_DIR}">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="test" depends="build-test">
+    <junit>
+      <classpath refid="classpath.all" />
+      <formatter type="brief" usefile="false" />
+      <test name="${TEST_SUITE_CLASS}" />
+    </junit>
+  </target>
+
+  <target name="build-test" depends="build">
+    <javac srcdir="${SRC_TEST_DIR}:${GEN_SRC_DIR}"
+        includeantruntime="false" destdir="${CLASSES_DIR}" debug="${DEBUG}">
+      <classpath refid="classpath.lib" />
+    </javac>
+  </target>
+
+  <target name="deps" depends="prepare">
+    <ivy:configure file="ivy-settings.xml" override="true"/>
+    <ivy:retrieve refresh="true" type="jar,bundle"
+        pattern="${LIB_DIR}/[artifact].[ext]" />
+  </target>
+
+  <target name="prepare">
+    <mkdir dir="${BUILD_DIR}" />
+    <mkdir dir="${CLASSES_DIR}" />
+    <mkdir dir="${DIST_DIR}" />
+    <mkdir dir="${GEN_DIR}" />
+    <mkdir dir="${GEN_SRC_DIR}" />
+    <mkdir dir="${LIB_DIR}" />
+  </target>
+
+  <target name="clean">
+    <delete dir="${BUILD_DIR}">
+    </delete>
+    <delete dir="${DIST_DIR}">
+    </delete>
+  </target>
+</project>

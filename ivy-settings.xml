@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2012, The SAVI Project. All rights reserved.
+
+  Front
+
+  Soheil Hassas Yeganeh <soheil@cs.toronto.edu>
+-->
+<ivysettings>
+  <caches artifactPattern="[organisation]/[module]/[revision]/[artifact].[ext]" />
+  <settings defaultResolver="ibiblio.java.net" overwriteMode="always" />
+
+  <resolvers>
+    <chain name="ibiblio.java.net">
+
+      <url name="maven" m2compatible="true">
+        <ivy
+          pattern="http://repo1.maven.org/maven2/[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
+        <artifact
+          pattern="http://repo1.maven.org/maven2/[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
+      </url>
+
+      <url name="java.net" m2compatible="true">
+        <ivy
+          pattern="http://download.java.net/maven/2/[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
+        <artifact
+          pattern="http://download.java.net/maven/2/[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
+      </url>
+
+      <ibiblio name="m2" m2compatible="true" />
+      <ibiblio name="ibiblio" m2compatible="true" />
+      <ibiblio name="Jboss" m2compatible="true"
+        root="http://repository.jboss.org/nexus/content/groups/public-jboss/"
+        pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+      <ibiblio name="JSF" m2compatible="true"
+        root="http://download.java.net/maven/2/" />
+      <ibiblio name="java.net" m2compatible="true"
+        root="http://repository.codehaus.org/" />
+    </chain>
+
+  </resolvers>
+</ivysettings>
