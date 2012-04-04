@@ -2,17 +2,21 @@
 package ca.savi.front.connector;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.jws.WebService;
+import javax.mail.MethodNotSupportedException;
 import javax.ws.rs.Path;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.spi.http.HttpContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.atmosphere.grizzly.AtmosphereAdapter;
-import org.jvnet.jax_ws_commons.transport.grizzly_httpspi.GrizzlyHttpContextFactory;
+import
+    org.jvnet.jax_ws_commons.transport.grizzly_httpspi.GrizzlyHttpContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,17 +105,32 @@ public class GrizzlyConnector implements Connector {
       HttpContext context = GrizzlyHttpContextFactory.createHttpContext(gws,
           "/ws", "/" + name);
       Endpoint endpoint;
-      try {
-        endpoint = Endpoint.create(clazz.newInstance());
-        endpoint.publish(context);
-      } catch (Exception e) {
-        logger.error("Cannot instantiate the endpoint {}: {}",
-            clazz.getSimpleName(), e.getMessage());
-      }
+        try {
+          endpoint = Endpoint.create(clazz.newInstance());
+          publish(endpoint, context);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
     }
 
     gws.start();
     return this;
+  }
+
+  /**
+   * @param endpoint
+   * @param context
+   */
+  private void publish(Endpoint endpoint, HttpContext context) {
+      Method publishMethod;
+      try {
+        publishMethod = endpoint.getClass().getDeclaredMethod("publish",
+            HttpContext.class);
+        publishMethod.invoke(endpoint, context);
+        return;
+      } catch (Exception e) {
+      }
+      endpoint.publish(context);
   }
 
   @Override
