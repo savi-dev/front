@@ -2,13 +2,11 @@
 package ca.savi.front.connector;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.jws.WebService;
-import javax.mail.MethodNotSupportedException;
 import javax.ws.rs.Path;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.spi.http.HttpContext;

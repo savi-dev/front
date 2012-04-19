@@ -18,7 +18,7 @@ import ca.savi.front.connector.ConnectorFactory;
  * f.register(SomeJAXRS.class, SomeJaxWS.class, SomeAtmoshphere.class);
  * f.start();
  * System.in.read();
- * f.stop();
+ * f.stop();e
  * }
  * </pre>
  *
